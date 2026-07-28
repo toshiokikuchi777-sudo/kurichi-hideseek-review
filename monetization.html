@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>kurichi hide&amp;seek 課金設計 v1｜監修サイト</title>
+<script>
+  // 監修サイト用ゲートチェック：未認証なら index.html へ戻す（ui.html/assets.html と同じ流儀）
+  if (sessionStorage.getItem("kurichi_review_ok") !== "1") {
+    location.replace("index.html");
+  }
+</script>
+<style>
+  .reviewBackBar{background:#fff; border-bottom:2px solid #E84A5F; padding:8px 20px; font-size:12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP",-apple-system,BlinkMacSystemFont,sans-serif;}
+  .reviewBackBar a{color:#4A2B20; text-decoration:none; font-weight:700;}
+  .reviewBackBar span{color:#E84A5F; border:1px solid #E84A5F; border-radius:999px; padding:2px 10px; font-size:11px;}
+  :root{
+    --cream:#FAF0E1;
+    --paper:#FFFDF8;
+    --ichigo:#E84A5F;
+    --ichigo-dark:#C93A4E;
+    --choco:#4A2B20;
+    --matcha:#7BA05B;
+    --budou:#804DAA;
+    --banana:#F0C453;
+    --chocobrown:#825434;
+    --line:#EAD9C4;
+    --muted:#8A6F5E;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    background:var(--cream);
+    color:var(--choco);
+    font-family:"Hiragino Maru Gothic ProN","Hiragino Maru Gothic Pro","BIZ UDPGothic","Yu Gothic UI","YuGothic","Meiryo",system-ui,-apple-system,sans-serif;
+    font-size:15px;
+    line-height:1.75;
+    padding:0 0 64px;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 14px;}
+
+  /* ── header ── */
+  .hero{
+    background:repeating-linear-gradient(-45deg,var(--ichigo) 0 14px,var(--cream) 14px 28px);
+    padding:26px 14px 20px;
+  }
+  .hero-card{
+    max-width:760px;margin:0 auto;
+    background:var(--paper);
+    border-radius:20px;
+    padding:22px 20px 18px;
+    box-shadow:0 4px 0 rgba(74,43,32,.12);
+    text-align:center;
+  }
+  .conf{
+    display:inline-block;
+    font-size:11px;
+    color:var(--muted);
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:1px 12px;
+    margin-bottom:10px;
+    letter-spacing:.08em;
+  }
+  .hero h1{
+    font-size:22px;
+    line-height:1.4;
+    color:var(--ichigo);
+    letter-spacing:.02em;
+  }
+  .hero h1 small{display:block;font-size:12px;color:var(--choco);font-weight:600;margin-top:4px;}
+  .hero .date{font-size:12px;color:var(--muted);margin-top:6px;}
+  .flavors{display:flex;justify-content:center;gap:8px;margin-top:12px;}
+  .dot{width:14px;height:14px;border-radius:50%;display:inline-block;border:2px solid var(--paper);box-shadow:0 0 0 1px var(--line);}
+  .lead{
+    margin:16px auto 0;
+    font-size:13px;
+    text-align:left;
+    background:var(--cream);
+    border-radius:12px;
+    padding:12px 14px;
+    color:var(--choco);
+  }
+  .lead b{color:var(--ichigo);}
+
+  /* ── TOC ── */
+  .toc{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 6px;}
+  .toc a{
+    font-size:12px;
+    text-decoration:none;
+    color:var(--ichigo-dark);
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:4px 12px;
+    font-weight:700;
+  }
+
+  /* ── section ── */
+  section{margin-top:26px;}
+  .sec-band{
+    background:repeating-linear-gradient(-45deg,var(--ichigo) 0 12px,var(--cream) 12px 24px);
+    border-radius:14px;
+    padding:8px;
+  }
+  .sec-band .pill{
+    background:var(--paper);
+    border-radius:9px;
+    padding:8px 14px;
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+  }
+  .sec-band .num{
+    font-size:13px;
+    font-weight:800;
+    color:var(--paper);
+    background:var(--ichigo);
+    border-radius:8px;
+    padding:2px 9px;
+    align-self:center;
+    flex-shrink:0;
+  }
+  .sec-band h2{font-size:17px;color:var(--choco);line-height:1.4;}
+  .card{
+    background:var(--paper);
+    border-radius:16px;
+    padding:16px 16px 14px;
+    margin-top:12px;
+    box-shadow:0 3px 0 rgba(74,43,32,.08);
+  }
+  .card h3{
+    font-size:14.5px;
+    color:var(--ichigo-dark);
+    margin-bottom:8px;
+    padding-left:10px;
+    border-left:4px solid var(--ichigo);
+    line-height:1.5;
+  }
+  .card + .card{margin-top:14px;}
+  .card p{margin:8px 0;}
+  .card ul,.card ol{padding-left:22px;margin:8px 0;}
+  .card li{margin:5px 0;}
+  .note{
+    font-size:12.5px;
+    color:var(--muted);
+    background:var(--cream);
+    border-radius:10px;
+    padding:10px 12px;
+    margin-top:10px;
+  }
+  .rule{
+    background:#FDF3F4;
+    border:1px dashed var(--ichigo);
+    border-radius:12px;
+    padding:10px 14px;
+    margin:10px 0;
+    font-weight:700;
+    color:var(--ichigo-dark);
+    font-size:13.5px;
+  }
+  b,strong{color:var(--ichigo-dark);}
+  .plain b,.plain strong{color:inherit;}
+
+  /* ── table ── */
+  .tw{
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    margin:10px -4px 4px;
+    padding:0 4px 6px;
+  }
+  table{
+    border-collapse:separate;
+    border-spacing:0;
+    width:100%;
+    font-size:12.5px;
+    line-height:1.55;
+    background:var(--paper);
+  }
+  th,td{
+    padding:7px 9px;
+    border-bottom:1px solid var(--line);
+    text-align:left;
+    vertical-align:top;
+  }
+  thead th{
+    background:var(--ichigo);
+    color:#fff;
+    font-size:12px;
+    white-space:nowrap;
+    position:sticky;top:0;
+  }
+  thead th:first-child{border-radius:10px 0 0 0;}
+  thead th:last-child{border-radius:0 10px 0 0;}
+  tbody tr:nth-child(even) td{background:#FBF6EC;}
+  td b{color:var(--ichigo-dark);}
+  .t-wide table{min-width:880px;}
+  .t-mid table{min-width:560px;}
+  .badge{
+    display:inline-block;
+    font-size:11px;
+    font-weight:800;
+    border-radius:6px;
+    padding:0 7px;
+    white-space:nowrap;
+  }
+  .b-p0{background:var(--ichigo);color:#fff;}
+  .b-s1{background:var(--banana);color:var(--choco);}
+  .b-f{background:var(--line);color:var(--choco);}
+  .scroll-hint{font-size:11px;color:var(--muted);text-align:right;margin-top:2px;}
+
+  footer{
+    margin-top:40px;
+    text-align:center;
+    font-size:11.5px;
+    color:var(--muted);
+  }
+  footer .stripe{
+    height:8px;
+    border-radius:4px;
+    background:repeating-linear-gradient(-45deg,var(--ichigo) 0 10px,var(--cream) 10px 20px);
+    margin-bottom:12px;
+  }
+  @media (min-width:600px){
+    body{font-size:15.5px;}
+    .hero h1{font-size:26px;}
+    table{font-size:13px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="reviewBackBar">
+  <a href="index.html">← 監修メニューに戻る</a>
+  <span>社外秘 / 監修用</span>
+</div>
+
+<div class="hero">
+  <div class="hero-card">
+    <span class="conf">社内検討用・非公開</span>
+    <h1>kurichi hide&amp;seek<br>課金設計 v1
+      <small>クリチランド かくれんぼナイト｜マネタイズ設計書</small>
+    </h1>
+    <div class="date">2026-07-28｜企画骨子_v1（2026-07-27）準拠</div>
+    <div class="flavors" aria-hidden="true">
+      <span class="dot" style="background:#E84A5F"></span>
+      <span class="dot" style="background:#7BA05B"></span>
+      <span class="dot" style="background:#804DAA"></span>
+      <span class="dot" style="background:#F6D365"></span>
+      <span class="dot" style="background:#825434"></span>
+    </div>
+    <p class="lead">本ゲームの第一目的は<b>KURICHIブランド接点</b>（商品→メタバース→リアルの中間接点）。収益は二の次。ただし「健全で、ブランドを傷つけず、運用でブレない」課金の骨格をローンチ時から仕込む。<br>
+    実装前提：ShopUI／ShopService（銭消費のコスメ購入）／PlayerDataService／実績システム稼働済み。<b>Robux受け口（MarketplaceService系）は未実装＝§6が新設仕様</b>。ガチャマシンは広場の「風景」として設置済み。</p>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <nav class="toc">
+    <a href="#s0">0 大原則</a>
+    <a href="#s1">1 商品カタログ</a>
+    <a href="#s2">2 通貨・ガチャ</a>
+    <a href="#s3">3 O2O線引き</a>
+    <a href="#s4">4 ロードマップ</a>
+    <a href="#s5">5 価格根拠</a>
+    <a href="#s6">6 実装タスク</a>
+    <a href="#s7">7 リスク</a>
+    <a href="#s8">8 経営判断</a>
+  </nav>
+
+  <!-- ─────────── 0 ─────────── -->
+  <section id="s0">
+    <div class="sec-band"><div class="pill"><span class="num">0</span><h2>大原則（変えない約束）</h2></div></div>
+    <div class="card">
+      <ol>
+        <li><b>Pay-to-Win禁止</b>。勝敗・速度・索敵・隠密・救出に効くものは一切売らない。</li>
+        <li>売ってよいのは5種だけ：<b>見た目／音／演出／利便（コスメ経済の加速・貸切）／ホスト権</b>。</li>
+        <li><b>Robux直結の確率商品（有償ガチャ・ルートボックス）は置かない</b>。ガチャは「プレイ報酬通貨のみで回る無料ガチャ」に限定（§2）。</li>
+        <li>子どもの財布に優しい価格：<b>1商品249R$以下</b>を上限に。FOMO圧（残り○時間の煽り演出）を使わない。</li>
+        <li><b>課金導線はロビーのみ</b>。ラウンド中に購入ポップアップを出さない。</li>
+        <li>ブランド語彙ルールが課金にも優先：商品名・説明文も「とける／とろける」禁止・ホラー記号禁止・白基調禁止。check_ip_words.py のスキャン対象（文字列リテラルなので自動的に対象になる）。</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>P2Wチェックリスト（新商品追加時に必ず3問）</h3>
+      <div class="rule">1つでもYESなら販売しない</div>
+      <ul>
+        <li>勝敗・移動速度・索敵・隠密・救出の<b>数値</b>に影響するか？</li>
+        <li>鬼／泥棒からの<b>視認性</b>を変えるか？（発光・透明化・シルエット破壊・ダミーとの差分）</li>
+        <li><b>買っていない人</b>の体験を損なうか？（画面妨害・音量圧・待機強制）</li>
+      </ul>
+      <p class="note">補助原則：コスメは既存の「隠れ成立中は判定・表示に載らない」設計に必ず乗せる。化け姿コスメは Config.Shop.Motifs と同じ「幻のクリチ味発動中とロビーのみ反映」枠、ネームタグ系は NameTagService の「ロビー限定表示」枠。<b>この既存2枠がP2W安全性の実装上の担保</b>。</p>
+    </div>
+  </section>
+
+  <!-- ─────────── 1 ─────────── -->
+  <section id="s1">
+    <div class="sec-band"><div class="pill"><span class="num">1</span><h2>商品カタログ</h2></div></div>
+
+    <div class="card">
+      <h3>1-1. Roblox課金手段の使い分け</h3>
+      <div class="tw t-mid">
+        <table>
+          <thead><tr><th>手段</th><th>性質</th><th>本作での用途</th></tr></thead>
+          <tbody>
+            <tr><td><b>Game Pass</b></td><td>買い切り・恒久・1人1回</td><td>コスメ・音・称号・サポーター特典（主力）</td></tr>
+            <tr><td><b>Developer Product</b></td><td>消費型・何度でも</td><td>ロビーのお祝い演出（花火等）に限定</td></tr>
+            <tr><td><b>プライベートサーバー</b></td><td>月額の貸切サーバー</td><td>友だち・家族・教室での貸切＋ホスト設定権</td></tr>
+            <tr><td><b>UGCアバターグッズ</b></td><td>体験外でも着られる商品</td><td>将来（グループ名義・審査が前提）</td></tr>
+            <tr><td><b>サブスクリプション</b></td><td>月額</td><td>将来（MAU規模を見てから）</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="scroll-hint">→ 表は横にスクロールできます</div>
+    </div>
+
+    <div class="card">
+      <h3>1-2. カタログ（カテゴリ×商品×価格帯×難度）</h3>
+      <div class="tw t-wide">
+        <table>
+          <thead><tr><th>#</th><th>カテゴリ</th><th>商品名（案）</th><th>手段</th><th>価格帯</th><th>内容</th><th>P2W安全設計</th><th>難度</th><th>フェーズ</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>サポーター</td><td><b>クリチサポーターパス</b></td><td>Pass</td><td>249R$</td><td>赤白ストライプのネームタグ枠＋限定称号「クリチランドVIPゲスト」＋コイン獲得+25%＋サポーターバッジ</td><td>ネームタグはロビー限定表示。コインはコスメ専用通貨＝勝敗非影響</td><td>低</td><td><span class="badge b-p0">P0</span></td></tr>
+            <tr><td>2</td><td>パンチFX</td><td><b>パンチデコ：ハートいちご</b></td><td>Pass</td><td>99R$</td><td>ハリチくんをぶっ飛ばす時の星エフェクトをハート＋いちごに</td><td>演出のみ。射程・クールダウン・音イベント発生は不変</td><td>低</td><td><span class="badge b-p0">P0</span></td></tr>
+            <tr><td>3</td><td>演出</td><td><b>クリチ花火</b></td><td>Dev Product</td><td>25R$</td><td>ロビー広場に赤白ストライプの花火を打ち上げ（全員が見られるお祝い）</td><td>ロビー限定・音量控えめ・連打クールダウン</td><td>中（受け口新設込み）</td><td><span class="badge b-p0">P0</span></td></tr>
+            <tr><td>4</td><td>ホスト権</td><td><b>プライベートサーバー</b></td><td>Private Server</td><td>無料 or 10R$</td><td>貸切＋ホスト設定UI（8テーマ照明の選択等）</td><td>貸切内で完結・公開サーバー非影響</td><td>低〜中</td><td><span class="badge b-p0">P0</span></td></tr>
+            <tr><td>5</td><td>トレイル</td><td><b>ごちそうさまトレイル</b>（ストライプ／いちごミルク／星空）</td><td>Pass</td><td>79〜149R$</td><td>クリア演出（アーチ通過〜リザルト）とロビー限定の軌跡</td><td>潜伏中は自動OFF＝隠密非影響</td><td>中</td><td><span class="badge b-s1">S1</span></td></tr>
+            <tr><td>6</td><td>ホーン</td><td><b>ぷぷーホーンコレクション</b></td><td>Pass</td><td>149R$</td><td>煽り（タウント）音のバリエ：ぷぷー（実商品ウーピー#クリチ準拠）／ラッパ／クリチちゃんボイス</td><td>音源スキンのみ。可聴半径・鬼への通知仕様は不変</td><td>低〜中（収録待ち）</td><td><span class="badge b-s1">S1</span></td></tr>
+            <tr><td>7</td><td>エモート</td><td><b>エモートパック8種</b></td><td>Pass</td><td>199R$</td><td>ごちそうさまポーズ／ぷるぷる／おじぎ 等</td><td>再生中移動不可・当たり判定不変</td><td>中〜高（新規システム）</td><td><span class="badge b-s1">S1</span></td></tr>
+            <tr><td>8</td><td>化け姿</td><td><b>化け姿プレミア</b>（ゴールデンいちご／ホログラムぶどう 等）</td><td>Pass or 無料ガチャ排出</td><td>99〜199R$</td><td>幻のクリチ味（切り札）発動中とロビーだけの限定モチーフ</td><td>通常の隠れはダミーと同一形状のまま＝既存Motifs枠に載せる</td><td>中</td><td><span class="badge b-s1">S1</span></td></tr>
+            <tr><td>9</td><td>鬼スキン</td><td><b>クリチちゃんおめかし</b>（パティシエ／ナイトパレード）</td><td>Pass</td><td>199〜249R$</td><td>自分が鬼番の時の衣装。全員に見える"映え"枠</td><td>シルエット・発光・視認距離は不変（コード内コメントで固定）</td><td>中〜高</td><td><span class="badge b-s1">S1</span></td></tr>
+            <tr><td>10</td><td>ジャム瓶</td><td><b>ジャム瓶ラベルデコ</b></td><td>Pass</td><td>79R$</td><td>自分が入るジャム瓶のラベル絵柄・蓋色</td><td>演出のみ。救出判定・位置は不変</td><td>低</td><td><span class="badge b-s1">S1</span></td></tr>
+            <tr><td>11</td><td>季節限定</td><td><b>季節の幻の味</b>（さくら味／パンプキン味／サンタいちご味）</td><td>Pass（期間限定販売・所持は恒久）</td><td>99〜199R$</td><td>季節色の化け姿＋ネームタグ＋トレイルのセット</td><td>各安全枠の組み合わせ</td><td>中</td><td><span class="badge b-s1">S1〜</span></td></tr>
+            <tr><td>12</td><td>UGC</td><td>ハリチ帽子・ストライプエプロン 等</td><td>UGC</td><td>市場価格</td><td>体験の外でも着られるアバターグッズ</td><td>—</td><td>高（名義・審査）</td><td><span class="badge b-f">将来</span></td></tr>
+            <tr><td>13</td><td>サブスク</td><td><b>クリチクラブ</b></td><td>Subscription</td><td>月額</td><td>月替わりコスメ＋サポーター特典</td><td>—</td><td>高</td><td><span class="badge b-f">将来</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="scroll-hint">→ 表は横にスクロールできます</div>
+      <p class="note"><b>看板商品＝「赤白ストライプ」シリーズ</b>（ネームタグ枠・トレイル・花火・エプロンUGC）。KURICHIブランドの視覚アイデンティティをそのまま商品化する軸で、サポーターパス（#1）に最初のストライプ枠を内包させて旗艦にする。</p>
+    </div>
+  </section>
+
+  <!-- ─────────── 2 ─────────── -->
+  <section id="s2">
+    <div class="sec-band"><div class="pill"><span class="num">2</span><h2>通貨・ガチャ方針</h2></div></div>
+
+    <div class="card">
+      <h3>2-1. ソフト通貨のリネーム（「銭」→クリチ語彙へ）</h3>
+      <p>HANDOFF未了TODO「通貨『銭』の世界観ズレ」を本書で解消する。<b>内部データ（zeniフィールド・属性Zeni）は不変・表示のみ変更</b>＝データ移行不要（内部ID不変の確定ルールと同じ流儀）。</p>
+      <div class="tw t-mid">
+        <table>
+          <thead><tr><th>案</th><th>表記</th><th>評価</th></tr></thead>
+          <tbody>
+            <tr><td><b>クリチコイン</b>（推奨）</td><td>「◯コイン」</td><td>ガチャマシンに入れる絵が物理的に成立。子どもに自明。略記が短い</td></tr>
+            <tr><td>シュガー</td><td>「◯シュガー」</td><td>甘い世界観に合うが通貨感が弱い</td></tr>
+            <tr><td>ごちそうポイント</td><td>「◯pt」</td><td>クリア語彙と紐づくが長い</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">あわせて既存コスメの和風残置名（「金箔仕立て」「桜染め」「銭」表記のUI文言）もS1でクリチ語彙へリネーム候補（例：ゴールドシュガー／さくらミルク）。</p>
+    </div>
+
+    <div class="card">
+      <h3>2-2. 獲得レート（現行値・変更なし）</h3>
+      <div class="tw">
+        <table>
+          <thead><tr><th>行動</th><th>コイン</th></tr></thead>
+          <tbody>
+            <tr><td>脱出成功（ごちそうさま）</td><td>120</td></tr>
+            <tr><td>あじみ1色</td><td>8</td></tr>
+            <tr><td>ラウンド生存</td><td>40</td></tr>
+            <tr><td>クリチちゃんとして捕獲1人</td><td>30</td></tr>
+            <tr><td>おむかえ（救出）</td><td>15</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>良いラウンド1回≒160コイン（8分）。中価格コスメ（100〜150）≒1ラウンド、高額（200）≒2ラウンド。キッズの集中時間で回る経済速度を維持する。サポーターパスの+25%は<b>この経済の加速のみ</b>（コインで買えるのはコスメだけなので勝敗に波及しない）。</p>
+    </div>
+
+    <div class="card">
+      <h3>2-3. ガチャの絶対線（Robloxポリシー整合）</h3>
+      <div class="rule">Robuxでコインを売らない。これが唯一にして最重要の防波堤。</div>
+      <ul>
+        <li>コインが有償入手不可能である限り、ガチャひろばのガチャは Roblox の <b>Paid Random Items 規約（確率開示義務・PolicyService.ArePaidRandomItemsRestricted による地域/年齢制限）の適用外</b>に保てる。間接でも（Robux→通貨→ガチャ）繋がった瞬間に有償ガチャ扱いになるため、「コイン販売」だけは将来も解禁しない。</li>
+        <li>それでも自主基準として：<b>排出確率のUI常設表示</b>／<b>天井</b>（10回で未所持コスメ確定）／<b>ダブりはコイン還元</b>／<b>排出はコスメのみ</b>。射幸性配慮はキッズ向けIPの信頼そのもの。</li>
+        <li>名称案「<b>クリチガチャ</b>」。広場の既存ガチャマシン（現在は風景）にProximityPromptを付けて機能昇格させる（1回120コイン≒1ラウンド分を目安）。</li>
+        <li>Robux直結ガチャ・ルートボックスは<b>将来も導入しない</b>（ブランド判断として明文化）。</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ─────────── 3 ─────────── -->
+  <section id="s3">
+    <div class="sec-band"><div class="pill"><span class="num">3</span><h2>O2O連動の線引き</h2></div></div>
+    <div class="card">
+      <div class="rule">原則：お金とモノはプラットフォーム内で完結。リアルとの行き来は「世界観とモチーフ」だけで繋ぐ。</div>
+
+      <h3>やる（安全な範囲）</h3>
+      <div class="tw t-mid">
+        <table>
+          <thead><tr><th>施策</th><th>内容</th></tr></thead>
+          <tbody>
+            <tr><td>実商品モチーフコスメ</td><td>ふわもちシリーズ5味 ↔ ゲームの5色フレーバー／ウーピー#クリチ ↔ ぷぷーホーン／赤白ストライプ＝看板コスメ。<b>実商品がそのままゲーム内資産になる</b></td></tr>
+            <tr><td>リアル→ゲーム誘導</td><td>店頭POP・パッケージQR→体験ページ（無料で遊べるものへの誘導は景品規制の外）</td></tr>
+            <tr><td>旗艦店連動の世界観</td><td>クリチランド北京（河心島・650㎡構想）のバーチャル再現、リアル店イベントとゲーム内シーズンの同時開催</td></tr>
+            <tr><td>非金銭のリアル連動</td><td>ゲーム内実績を店頭で「見せると店員が褒める・記念撮影」レベルの体験連動（景品なし）</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 style="margin-top:16px;">やらない／当面見送り（理由つき）</h3>
+      <div class="tw t-mid">
+        <table>
+          <thead><tr><th>施策</th><th>見送り理由</th></tr></thead>
+          <tbody>
+            <tr><td>Robux購入→実店舗クーポン・実物景品</td><td>景表法の景品類該当リスク（総付景品の上限：取引1,000円未満→200円／1,000円以上→取引価額の2割）＋Roblox規約上の実世界特典の制約＋未成年・地域運用コスト</td></tr>
+            <tr><td>Roblox内での実物販売</td><td>Robloxのコマース機能は日本未提供・年齢/地域制限あり→現時点で対象外</td></tr>
+            <tr><td>外部リンク誘導・個人情報取得</td><td>13歳未満が多い体験での広告・誘導規制（Roblox広告基準）とCOPPA/個人情報保護法配慮。クーポン引換で氏名・連絡先を取る運用はしない</td></tr>
+            <tr><td>「ゲームで買うと実店舗で安くなる」等の価格連動表現</td><td>有利誤認・二重価格の論点を持ち込まない</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="scroll-hint">→ 表は横にスクロールできます</div>
+    </div>
+  </section>
+
+  <!-- ─────────── 4 ─────────── -->
+  <section id="s4">
+    <div class="sec-band"><div class="pill"><span class="num">4</span><h2>フェーズロードマップ</h2></div></div>
+
+    <div class="card">
+      <h3><span class="badge b-p0">P0</span>　ローンチ（公開時）— SKU 4点＋通貨リネーム</h3>
+      <ul>
+        <li>クリチサポーターパス（249R$）／パンチデコ（99R$）／クリチ花火（25R$）／プライベートサーバー（無料 or 10R$）</li>
+        <li>KPIは<b>ブランド接点系を主</b>：DAU・平均セッション15分+・D1リテンション25%+・いいね率75%+</li>
+        <li>課金はヘルスチェック：ShopUI開封率20%+・課金コンバージョン0.5〜1.5%・<b>受け口不具合（二重付与/未付与）ゼロ</b></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3><span class="badge b-s1">S1</span>　シーズン1（ローンチ+4〜8週）— 拡張</h3>
+      <ul>
+        <li>トレイル／ぷぷーホーン（収録後）／ジャム瓶デコ／化け姿プレミア／鬼スキン／エモート</li>
+        <li><b>クリチガチャ稼働</b>（無料ガチャ・確率表示・天井）＋季節「幻の味」第1弾</li>
+        <li>KPI：課金コンバージョン1.5〜3%・パス所持率5%+・ガチャ参加率30%+・D7リテンション8%+・リピート購入の発生</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3><span class="badge b-f">将来</span>　MAU実績を見て判断</h3>
+      <ul>
+        <li>UGCアバターグッズ（グループ名義・審査が前提）／クリチクラブ（サブスク）／北京旗艦店との連動イベント</li>
+        <li>判断材料：MAU規模・海外比率・名義問題（§8-1）の解消状況</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ─────────── 5 ─────────── -->
+  <section id="s5">
+    <div class="sec-band"><div class="pill"><span class="num">5</span><h2>価格根拠</h2></div></div>
+    <div class="card">
+      <ul>
+        <li><b>プレイヤー体感</b>：1R$≒¥2（¥800≒400R$購入時）。25R$=約50円（花火）／99R$=約200円（カプセルトイ1回の感覚）／249R$=約500円（お小遣いの上限帯）。</li>
+        <li><b>開発者取り分</b>：Pass/Productは売上の70%がRobuxで入り、DevEx換算≒$0.0038/R$。<b>100R$売れて約40円</b>。→ 収益事業ではなく接点事業、という前提を数字で共有しておく（売上目標を課さない根拠）。</li>
+        <li><b>相場整合</b>：人気かくれんぼ／プロップハント系の相場（パス99〜499R$・FX/トレイル50〜150R$）の下〜中位に収める。ブランド公式が相場上限を攻める必要はない。</li>
+        <li><b>上限ポリシー</b>：1商品249R$以下・月間新商品は少数・期間限定でも「所持は恒久」（買ったものが消えない）。</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ─────────── 6 ─────────── -->
+  <section id="s6">
+    <div class="sec-band"><div class="pill"><span class="num">6</span><h2>実装タスク（開発者向け）</h2></div></div>
+
+    <div class="card">
+      <h3>A. Robux受け口（新規 MonetizationService.luau）</h3>
+      <ul>
+        <li>Config.Monetization 新設：GamePassIds／DevProductIds／SKU定義テーブル（名前・説明・カテゴリ・付与内容）。<b>ID=0はUI非表示</b>＝コードだけ先行デプロイして段階公開できる形に</li>
+        <li>MarketplaceService.ProcessReceipt 実装：receiptInfo.PurchaseId で冪等化（PlayerDataに処理済みIDを保存→<b>保存成功を確認してから</b> PurchaseGranted を返す。失敗時は NotProcessedYet）</li>
+        <li>Game Pass判定：UserOwnsGamePassAsync をpcall+リトライ+セッションキャッシュ、PromptGamePassPurchaseFinished で購入直後の即時反映。所有はplayer属性（例 HasSupporterPass）に投影してクライアント/他サービスから参照</li>
+        <li>購入プロンプトはサーバー起点情報で検証（クライアント申告のproductIdを信用しない）</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>B. データ（PlayerDataService 拡張）</h3>
+      <ul>
+        <li>data.receiptIds：処理済みPurchaseIdの記録（上限50件でトリムするリングバッファ）＋_sanitize追随</li>
+        <li>コスメ所持は既存 unlockedCosmetics（"category:id"自由形式）に新カテゴリを追加するだけ：punchfx: / trail: / horn: / oniskin: / jarskin: / emote: ＝<b>データ構造の変更不要</b></li>
+        <li>DEFAULT_EQUIPPED へ新カテゴリの既定値追加（punchfx="default" 等）＋_sanitizeEquipped追随</li>
+        <li>パス由来の特典は「所有＝パス所有判定」で都度導出し、DataStoreに二重保存しない（返金・剥奪への耐性）</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>C. UI（ShopUI 拡張）</h3>
+      <ul>
+        <li>既存タブ（あじみホロ／ランタン／モチーフ／称号）に「<b>Robuxショップ</b>」タブ追加。R$アイコン表記・PromptGamePassPurchase/PromptProductPurchase 呼び出し</li>
+        <li>ShopService.buildSnapshot にパス所有・新カテゴリ装備状態を追加（既存 ShopUpdate イベントに相乗り。銭ショップの PurchaseCosmetic 経路とRobux経路は<b>分離</b>したまま）</li>
+        <li>課金UIはロビーのみ・ラウンド中は開けない（既存の開閉制御に準拠）</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>D. 効果の配線（各1点フック）</h3>
+      <ul>
+        <li>NameTagService：ストライプ枠・バッジ（ロビー限定表示の既存仕様のまま）</li>
+        <li>HarichiMinionService._spawnPunchFlash：punchfxスキンのlookup</li>
+        <li>RoundService（脱出〜リザルト）：ごちそうさまトレイル／花火Dev Product演出</li>
+        <li>タウント経路：ホーン音IDの差し替え（SoundConfig にスロット追加する既存の流儀）</li>
+        <li>YasakiAI/HumanYasakiController のattach：鬼スキン（<b>シルエット・視認性維持ルールをコードコメントに明記</b>）</li>
+        <li>RoundService._buildCaptureJar：ジャム瓶ラベル・蓋色のlookup</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>E. 周辺</h3>
+      <ul>
+        <li>プライベートサーバー：Creator Hubで有効化＋コードは game.PrivateServerOwnerId でホスト判定→ホスト設定UI（テーマ照明8種の選択から）</li>
+        <li>PolicyService:GetPolicyInfoForPlayerAsync を入場時に取得・キャッシュ（将来の地域/年齢分岐への保険）</li>
+        <li>計測：購入ファネル（ShopUI開封→Prompt表示→成立）をAnalyticsServiceのイベントで記録</li>
+        <li>検証：標準検証セット（luau-analyze／rojo build／NGワードスキャン＝新商品名も文字列リテラルとして自動対象／アセットID許可リスト）に「<b>ProcessReceipt冪等テスト</b>（同一PurchaseId二重送出で付与1回）」を追加</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>F. ソフトガチャ（S1・新規 GachaService.luau）</h3>
+      <ul>
+        <li>コイン消費（TrySpendZeni流用）・重み抽選・天井カウンタ（PlayerData追加）・確率表示UI・ダブりコイン還元</li>
+        <li>ガチャひろばの既存マシン（風景）にProximityPrompt＋排出演出を接続</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ─────────── 7 ─────────── -->
+  <section id="s7">
+    <div class="sec-band"><div class="pill"><span class="num">7</span><h2>リスクと対策</h2></div></div>
+    <div class="card">
+      <div class="tw t-mid">
+        <table>
+          <thead><tr><th>#</th><th>リスク</th><th>対策</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>P2Wクリープ（運用中になし崩しで性能商品が混入）</td><td>§0の3問チェックリストを商品追加フローに必須化。本書を正とし、逸脱はv2改訂として明示的に判断</td></tr>
+            <tr><td>2</td><td>射幸性批判（キッズ向けガチャ）</td><td>Robux直結ガチャの永久不採用を明文化・コイン販売禁止・確率常設表示・天井・ダブり還元</td></tr>
+            <tr><td>3</td><td>未成年の使いすぎ</td><td>価格上限249R$・パスは1人1回で重複購入なし・FOMO演出不使用・課金導線はロビーのみ</td></tr>
+            <tr><td>4</td><td>ブランド毀損（KURICHIは食品ブランド）</td><td>商品名/説明文もNGワードスキャン対象・広告的な煽り表現の抑制・返金対応はRoblox標準に従い個別対応で揉めない</td></tr>
+            <tr><td>5</td><td>名義リスク（現状MASTARTOM777個人名義）</td><td>収益発生前にグループ名義移行を判断（§8-1）。Pass/Product IDは名義移行で作り直し前提のためConfig.Monetizationに集約して疎結合に</td></tr>
+            <tr><td>6</td><td>受け口の技術事故（二重付与・未付与・返金）</td><td>冪等ProcessReceipt・保存成功前はNotProcessedYet・Studioテスト購入とログでのリリース前検証</td></tr>
+            <tr><td>7</td><td>O2Oの先走り（規約・景表法）</td><td>§3の線引きを営業・店舗側にも共有。新施策は「無料への誘導か？個人情報を取らないか？景品類に当たらないか？」の3点ゲートを通す</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="scroll-hint">→ 表は横にスクロールできます</div>
+    </div>
+  </section>
+
+  <!-- ─────────── 8 ─────────── -->
+  <section id="s8">
+    <div class="sec-band"><div class="pill"><span class="num">8</span><h2>経営判断が必要な論点（3つ）</h2></div></div>
+    <div class="card">
+      <ol>
+        <li><b>名義と収益の受け皿</b>：MASTARTOM777個人名義のまま課金をONにするか、VSW側のグループ名義へ移行してからにするか。Pass/Productは名義に紐づき後からの移行はID作り直しになる。UGC・サブスク・DevEx受取の前提条件でもあるため、<b>ローンチ前に「グループ化するか」だけは先に決めたい</b>。</li>
+        <li><b>価格・商品ポリシーの公式化</b>：「1商品249R$以下／Robuxガチャ永久不採用／コイン販売禁止／期間限定でも所持は恒久」をKURICHIブランドポリシーとして明文化するか。将来コラボ先や運用者が変わっても効く保険になる。</li>
+        <li><b>O2Oの初手のタイミング</b>：店頭QR→ゲーム誘導をいつ始めるか（パッケージ・POP改版と連動）。ゲーム→リアル方向は当面「モチーフ連動のみ」で確定してよいか。北京旗艦店連動はどのシーズンに合わせるか。</li>
+      </ol>
+    </div>
+  </section>
+
+  <footer>
+    <div class="stripe"></div>
+    kurichi hide&amp;seek 課金設計 v1｜2026-07-28｜社内検討用・非公開<br>
+    正本：01_企画書/課金設計_v1.md（本HTMLは確認用ミラー）
+  </footer>
+
+</div>
+</body>
+</html>
