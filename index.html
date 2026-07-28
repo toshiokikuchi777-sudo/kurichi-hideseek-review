@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>kurichi hide&seek ｜ 監修サイト</title>
+<style>
+:root{
+  --ink:#0f0f14; --ink2:#17171e; --ink3:#1e1e26;
+  --cream:#faf0e1; --sumi:#b4afa8;
+  --ichigo:#e84a5f; --banana:#f6d365; --choco:#825434;
+  --line:rgba(250,240,225,0.1);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:var(--ink); color:var(--cream);}
+body{
+  font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP",-apple-system,BlinkMacSystemFont,sans-serif;
+  line-height:1.7; -webkit-font-smoothing:antialiased;
+}
+
+/* ===== パスワードゲート ===== */
+#gate{
+  position:fixed; inset:0; z-index:100;
+  background:radial-gradient(circle at 50% 25%, rgba(232,74,95,0.14), transparent 60%), var(--ink);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:24px; text-align:center;
+}
+#gate.hidden{display:none;}
+.gate-mark{font-size:12px; letter-spacing:.35em; color:var(--ichigo); font-weight:700; margin-bottom:20px;}
+.gate-title{font-weight:900; font-size:clamp(24px,6vw,40px); line-height:1.3; margin-bottom:10px;}
+.gate-sub{color:var(--sumi); font-size:13px; letter-spacing:.08em; margin-bottom:32px;}
+.gate-form{display:flex; gap:10px; flex-wrap:wrap; justify-content:center;}
+.gate-form input{
+  background:var(--ink2); border:1px solid var(--line); color:var(--cream);
+  padding:13px 18px; border-radius:10px; font-size:15px; width:220px; outline:none;
+  font-family:inherit; letter-spacing:.12em; text-align:center;
+}
+.gate-form input:focus{border-color:var(--ichigo);}
+.gate-form button{
+  background:var(--ichigo); color:#fff; border:none; padding:13px 26px; border-radius:10px;
+  font-size:15px; font-weight:700; cursor:pointer; font-family:inherit; transition:.2s;
+}
+.gate-form button:hover{background:#f05f72;}
+.gate-err{color:var(--ichigo); font-size:12px; margin-top:14px; min-height:16px; letter-spacing:.05em;}
+.gate-foot{position:absolute; bottom:20px; font-size:11px; color:var(--sumi); opacity:.6; letter-spacing:.08em;}
+
+/* ===== メニュー本体 ===== */
+#app{display:none;}
+#app.show{display:block;}
+header.top{
+  padding:44px 20px 30px; text-align:center;
+  border-bottom:1px solid var(--line);
+  background:linear-gradient(180deg,#181820,var(--ink));
+}
+.confBadge{
+  display:inline-block; font-size:11px; letter-spacing:.1em; color:var(--ichigo);
+  border:1px solid var(--ichigo); border-radius:999px; padding:3px 12px; margin-bottom:16px;
+}
+header.top h1{font-size:clamp(24px,5vw,34px); font-weight:900;}
+header.top h1 span{color:var(--ichigo);}
+header.top p{color:var(--sumi); font-size:13px; margin-top:8px;}
+.paletteStrip{display:flex; justify-content:center; gap:6px; margin-top:18px;}
+.paletteStrip i{width:22px; height:22px; border-radius:6px; display:inline-block;}
+
+main.menu{max-width:760px; margin:0 auto; padding:44px 20px 60px;}
+.cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:20px;}
+.card{
+  background:var(--ink2); border:1px solid var(--line); border-radius:16px;
+  padding:32px 24px; text-decoration:none; color:var(--cream);
+  transition:.2s; display:block;
+}
+.card:hover{border-color:var(--ichigo); transform:translateY(-2px);}
+.card .icon{font-size:38px;}
+.card h2{font-size:19px; margin:14px 0 6px; font-weight:900;}
+.card p{font-size:13px; color:var(--sumi);}
+.card .go{display:inline-block; margin-top:16px; font-size:13px; color:var(--banana); font-weight:700;}
+
+footer.bot{text-align:center; padding:30px 18px 44px; color:var(--sumi); font-size:11px; letter-spacing:.06em; border-top:1px solid var(--line);}
+footer.bot .conf{color:var(--ichigo); font-weight:700;}
+
+@media(max-width:520px){
+  .gate-form{flex-direction:column; align-items:center;}
+  .gate-form input{width:240px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== パスワードゲート ===== -->
+<div id="gate">
+  <div class="gate-mark">KURICHI HIDE&amp;SEEK</div>
+  <h1 class="gate-title">監修サイト</h1>
+  <p class="gate-sub">CONFIDENTIAL ─ 関係者限定・社外秘</p>
+  <form class="gate-form" id="gateForm" autocomplete="off">
+    <input type="password" id="pw" placeholder="PASSWORD" autofocus>
+    <button type="submit">閲覧する</button>
+  </form>
+  <div class="gate-err" id="gateErr"></div>
+  <div class="gate-foot">本サイトの内容は関係者限定の監修用資料です。無断転載・共有を禁じます。</div>
+</div>
+
+<!-- ===== メニュー本体 ===== -->
+<div id="app">
+  <header class="top">
+    <div class="confBadge">社外秘 / 監修用</div>
+    <h1>クリチランド <span>かくれんぼナイト</span></h1>
+    <p>kurichi hide&amp;seek ── 監修サイト</p>
+    <div class="paletteStrip">
+      <i style="background:#e84a5f" title="Ichigo"></i>
+      <i style="background:#f6d365" title="Banana"></i>
+      <i style="background:#faf0e1" title="Cream"></i>
+      <i style="background:#825434" title="Choco"></i>
+    </div>
+  </header>
+
+  <main class="menu">
+    <div class="cards">
+      <a class="card" href="ui.html">
+        <div class="icon">🖥️</div>
+        <h2>UI確認</h2>
+        <p>HUD・状態バリエーション・リザルト・FTUE・ショップ・ワールド意匠・変身モチーフ・アイコンを、実コードの実値・実文言でブラウザ確認できるカタログです。</p>
+        <span class="go">開く →</span>
+      </a>
+      <a class="card" href="assets.html">
+        <div class="icon">🖼️</div>
+        <h2>アセットギャラリー</h2>
+        <p>店舗モデル5種のプレビュー・アイコンv2一覧・クリチちゃん/ハリチくんの検証レンダーを、公開済みアセットIDと合わせて確認できます。</p>
+        <span class="go">開く →</span>
+      </a>
+    </div>
+  </main>
+
+  <footer class="bot">
+    <span class="conf">CONFIDENTIAL</span> ─ 本サイトはクリチランド かくれんぼナイトの監修を目的とした関係者限定資料です。<br>
+    生成日時：2026-07-28
+  </footer>
+</div>
+
+<script>
+(function(){
+  // ---- 簡易パスワードゲート（クライアントサイド／運用上の閲覧制限） ----
+  var PASS = "vr2026";
+  var KEY  = "kurichi_review_ok";
+  var gate = document.getElementById('gate');
+  var app  = document.getElementById('app');
+
+  function unlock(){ gate.classList.add('hidden'); app.classList.add('show'); }
+
+  if(sessionStorage.getItem(KEY) === "1"){ unlock(); }
+
+  document.getElementById('gateForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    var v = document.getElementById('pw').value.trim();
+    if(v === PASS){
+      sessionStorage.setItem(KEY, "1");
+      unlock();
+    }else{
+      document.getElementById('gateErr').textContent = "パスワードが違います";
+      document.getElementById('pw').value = "";
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
