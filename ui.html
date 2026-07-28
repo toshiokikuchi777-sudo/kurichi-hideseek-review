@@ -10,6 +10,12 @@
     --cream:#faf0e1; --sumi:#b4afa8;
     --ichigo:#e84a5f; --banana:#f6d365; --choco:#825434;
     --aka:#e84a5f; --ao:#825434; --midori:#7ba05b; --ki:#f6d365; --murasaki:#804daa;
+    /* 追加実装：クリチフォント統一のWeb近似（Config.Fonts参照）。実機はRobloxの
+       Enum.Font.FredokaOne(Head)/Enum.Font.Cartoon(Body)。ブラウザにその書体は無いため、
+       Nunito系の丸ゴシック＋太さでウェイト差を近似する（フォントファイル埋め込みはせず、
+       未インストール環境では通常のsans-serifへ自動フォールバック＝自己完結を維持）。 */
+    --font-head:"Baloo 2","Fredoka","Nunito","Trebuchet MS","Arial Rounded MT Bold",sans-serif;
+    --font-body:"Nunito","Trebuchet MS","Hiragino Sans","Yu Gothic",sans-serif;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -19,7 +25,7 @@
     line-height:1.7; overflow-x:hidden;
   }
   a{color:var(--banana);}
-  h1,h2,h3{font-weight:900; margin:0 0 .5em;}
+  h1,h2,h3{font-weight:900; margin:0 0 .5em; font-family:var(--font-head);}
   .wrap{max-width:1180px; margin:0 auto; padding:0 20px;}
 
   /* ── ヘッダー ── */
@@ -91,31 +97,33 @@
     display:flex; align-items:center; gap:12px; background:rgba(20,20,26,.68);
   }
   .hudColorChip{width:44px; height:44px; border-radius:8px; display:flex; align-items:center; justify-content:center;
-    font-weight:900; font-size:20px; color:#fff; text-shadow:0 1px 3px #000; border:1px solid rgba(255,255,255,.35);}
-  .hudColorName{font-weight:800; font-size:22px;}
+    font-weight:900; font-size:20px; color:#fff; text-shadow:0 1px 3px #000; border:1px solid rgba(255,255,255,.35); font-family:var(--font-head);}
+  .hudColorName{font-weight:800; font-size:22px; font-family:var(--font-head);}
   .hudLife{ right:1.7%; top:3%; width:150px; display:flex; align-items:center; gap:8px;}
   .heartMini{position:relative; width:20px; height:20px;}
   .heartMini i{position:absolute; background:var(--ichigo); border-radius:50%; width:11px; height:11px;}
   .heartMini i.l{left:1px; top:1px;} .heartMini i.r{left:9px; top:1px;}
   .heartMini b{position:absolute; left:4px; top:6px; width:11px; height:11px; background:var(--ichigo); transform:rotate(45deg); border-radius:2px;}
-  .hudTimer{right:1.7%; top:9.7%; width:150px; text-align:center; font-weight:800; font-size:1.3em;}
+  .hudTimer{right:1.7%; top:9.7%; width:150px; text-align:center; font-weight:800; font-size:1.3em; font-family:var(--font-head);}
   .hudHelp{
     left:1.7%; bottom:2.5%; width:96.6%; text-align:center; font-size:13px; color:var(--sumi);
-    background:rgba(20,20,26,.5);
+    background:rgba(20,20,26,.5); font-family:var(--font-body);
   }
   .hudToast{
     left:50%; top:16%; transform:translateX(-50%); background:rgba(20,20,26,.9);
     padding:8px 22px; font-weight:600; color:var(--cream); border-radius:999px; white-space:nowrap;
+    font-family:var(--font-body);
   }
   .hudTaunt{
     right:6.5%; bottom:6%; width:64px; height:64px; border-radius:14px;
     background:rgba(15,15,20,.7); border:1px solid #46404a; display:flex; flex-direction:column;
     align-items:center; justify-content:flex-end; padding-bottom:5px; font-size:12px; font-weight:800;
+    font-family:var(--font-head);
   }
   .hudPunch{
     right:16%; bottom:6%; width:74px; height:74px; border-radius:50%;
     background:rgba(232,74,95,.35); border:2px solid var(--ichigo); display:flex; align-items:center; justify-content:center;
-    font-weight:900; font-size:14px;
+    font-weight:900; font-size:14px; font-family:var(--font-head);
   }
   .hudHide{ left:1.7%; bottom:9%; width:44%; font-size:14px; font-weight:700;}
 
@@ -123,7 +131,7 @@
   .stateGrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; margin-top:18px;}
   .stateCard{background:var(--ink2); border:1px solid #2c2c36; border-radius:10px; padding:16px 18px;}
   .stateCard h4{margin:0 0 6px; font-size:13px; letter-spacing:.05em; color:var(--sumi); text-transform:uppercase;}
-  .stateCard .txt{font-size:17px; font-weight:800;}
+  .stateCard .txt{font-size:17px; font-weight:800; font-family:var(--font-head);}
   .stateCard.hide .txt{color:#9ad6b0;}
   .stateCard.found .txt{color:var(--ichigo);}
   .stateCard.tremble .txt{color:#ffb199; animation:tremble 0.18s infinite;}
@@ -139,11 +147,11 @@
     background:radial-gradient(ellipse at 50% -10%, #23232c, #0f0f14 70%);
     border:1px solid #2c2c36; border-radius:14px; padding:28px 22px; text-align:center;
   }
-  .resultCard h3{font-size:26px; margin-bottom:10px;}
+  .resultCard h3{font-size:26px; margin-bottom:10px; font-family:var(--font-head);}
   .resultCard.escape h3{color:#9ad6b0;}
   .resultCard.yasaki h3{color:var(--ichigo);}
-  .resultCard .sub{color:var(--sumi); font-size:14px; margin-bottom:14px;}
-  .resultCard .zeni{color:var(--banana); font-weight:800;}
+  .resultCard .sub{color:var(--sumi); font-size:14px; margin-bottom:14px; font-family:var(--font-body);}
+  .resultCard .zeni{color:var(--banana); font-weight:800; font-family:var(--font-head);}
 
   /* ── 5. FTUE ── */
   .ftueRow{display:flex; gap:16px; flex-wrap:wrap; margin-top:18px;}
@@ -152,29 +160,30 @@
     border-radius:16px; padding:20px; text-align:center;
   }
   .ftueCard .emoji{font-size:46px;}
-  .ftueCard h4{margin:10px 0 6px; font-size:16px;}
-  .ftueCard p{font-size:13px; color:var(--sumi); white-space:pre-line;}
+  .ftueCard h4{margin:10px 0 6px; font-size:16px; font-family:var(--font-head);}
+  .ftueCard p{font-size:13px; color:var(--sumi); white-space:pre-line; font-family:var(--font-body);}
   .ftueCard .step{font-size:11px; color:#79746e;}
 
   /* ── 6. ショップ ── */
   .shopMock{background:var(--ink2); border:1px solid #2c2c36; border-radius:14px; padding:20px; margin-top:18px; max-width:640px;}
-  .shopHead{font-weight:900; font-size:19px; margin-bottom:14px;}
+  .shopHead{font-weight:900; font-size:19px; margin-bottom:14px; font-family:var(--font-head);}
   .shopTabs{display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;}
-  .shopTabs span{padding:7px 14px; border-radius:8px; background:#26262f; font-size:13px; font-weight:700;}
+  .shopTabs span{padding:7px 14px; border-radius:8px; background:#26262f; font-size:13px; font-weight:700; font-family:var(--font-head);}
   .shopTabs span.active{background:var(--ichigo); color:#fff;}
   .shopItem{
     display:flex; align-items:center; justify-content:space-between; padding:10px 4px;
     border-bottom:1px solid #26262f; font-size:14px;
   }
-  .shopItem .price{color:var(--banana); font-weight:700; font-size:13px;}
+  .shopItem>span:first-child{font-family:var(--font-head);}
+  .shopItem .price{color:var(--banana); font-weight:700; font-size:13px; font-family:var(--font-body);}
   .shopItem .dot{width:14px; height:14px; border-radius:4px; display:inline-block; margin-right:8px; vertical-align:-2px;}
 
   /* ── 7. ワールド意匠 ── */
   .worldGrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:18px; margin-top:18px;}
   .worldCard{background:var(--ink2); border:1px solid #2c2c36; border-radius:12px; padding:14px; text-align:center;}
   .worldCard svg{width:100%; height:170px; background:#0b0b0f; border-radius:8px;}
-  .worldCard .cap{margin-top:10px; font-weight:800; font-size:14px;}
-  .worldCard .desc{font-size:12px; color:var(--sumi); margin-top:4px;}
+  .worldCard .cap{margin-top:10px; font-weight:800; font-size:14px; font-family:var(--font-head);}
+  .worldCard .desc{font-size:12px; color:var(--sumi); margin-top:4px; font-family:var(--font-body);}
 
   /* ── 8. モチーフ15種 ── */
   .motifGroup{margin-top:22px;}
@@ -182,8 +191,8 @@
   .motifRow{display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:12px;}
   .motifCard{background:var(--ink2); border:1px solid #2c2c36; border-radius:10px; padding:10px; text-align:center;}
   .motifCard svg{width:100%; height:70px;}
-  .motifCard .name{font-size:12.5px; font-weight:700; margin-top:4px;}
-  .motifCard .price{font-size:11px; color:var(--banana);}
+  .motifCard .name{font-size:12.5px; font-weight:700; margin-top:4px; font-family:var(--font-head);}
+  .motifCard .price{font-size:11px; color:var(--banana); font-family:var(--font-body);}
 
   /* ── 9. アイコン ── */
   .iconGrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(90px,1fr)); gap:12px; margin-top:16px;}
@@ -192,6 +201,20 @@
   .iconCard img{width:48px; height:48px; object-fit:contain; background:#fff2; border-radius:8px; padding:4px;}
   .iconCard .iname{font-size:11px; font-weight:700; margin-top:6px; color:var(--cream);}
   .iconCard .ipurpose{font-size:10px; color:var(--sumi); margin-top:2px;}
+
+  /* ── 10. フォント ── */
+  .fontTable{width:100%; border-collapse:collapse; margin-top:6px; font-size:13px;}
+  .fontTable th,.fontTable td{border:1px solid #2c2c36; padding:9px 12px; text-align:left; vertical-align:top;}
+  .fontTable th{background:#20202a; color:var(--sumi); font-size:11.5px; font-weight:700; letter-spacing:.03em;}
+  .fontTable td{background:var(--ink2);}
+  .fontSampleGrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; margin-top:8px;}
+  .fontSample{background:var(--ink2); border:1px solid #2c2c36; border-radius:12px; padding:16px 18px;}
+  .fontSample .tag{font-size:11px; letter-spacing:.05em; color:var(--sumi); text-transform:uppercase; margin-bottom:10px;}
+  .fontSample .big{font-size:32px; font-weight:800; margin-bottom:6px;}
+  .fontSample .mid{font-size:22px; font-weight:800; margin-bottom:12px; color:var(--ichigo);}
+  .fontSample .jp{font-size:15px; color:var(--cream);}
+  .fontSample.headSample .big,.fontSample.headSample .mid,.fontSample.headSample .jp{font-family:var(--font-head);}
+  .fontSample.bodySample .big,.fontSample.bodySample .mid,.fontSample.bodySample .jp{font-family:var(--font-body); font-weight:600;}
 
   footer{padding:26px 0 50px; text-align:center; color:#5a564f; font-size:12px;}
   footer code{color:#5a564f; background:none;}
@@ -232,6 +255,7 @@
       <a href="#world">⑦ ワールド意匠</a>
       <a href="#motifs">⑧ 変身モチーフ15種</a>
       <a href="#icons">⑨ アイコンv2</a>
+      <a href="#fonts">⑩ フォント</a>
     </nav>
   </div>
 </header>
@@ -546,12 +570,71 @@
     <p class="src">出典：04_モデリング/upload_batch1/icons_v2/icon_*.png（全12種）</p>
   </section>
 
+  <!-- ⑩ フォント -->
+  <section id="fonts">
+    <h2>⑩ ブランドフォント<small>ReplicatedStorage/Shared/Config.luau ── Config.Fonts（Roblox標準Enum.Fontから「クリチに似合う可愛いフォント」への追加実装）</small></h2>
+
+    <div class="note">
+      <b>重要な前提</b>：日本語グリフ（ひらがな/カタカナ/漢字）はRobloxの仕様上どの<code>Enum.Font</code>を指定しても共通のCJKフォールバック書体で描画されます。つまりFont指定による実効差は<b>英数字・記号・全体のウェイト（太さ/行間）</b>にのみ生じます。下のサンプルも日本語部分はほぼ同じに見え、<code>04:52</code>や<code>OPEN!</code>のような英数字部分でだけ違いが分かるはずです（＝実機Robloxと同じ挙動をこのページでも再現しています）。
+    </div>
+    <div class="note" style="margin-top:10px;">
+      <b>この先のWebプレビューについて</b>：ブラウザにはRoblox標準フォント（FredokaOne／Cartoon）そのものは存在しないため、丸ゴシック系のWebセーフフォント（Nunito／Baloo 2／Fredoka等・OS標準搭載分のみ、ファイル埋め込みはなし＝自己完結を維持）で太さと丸みを近似しています。実機の字形とは異なりますが、「丸くて可愛い」方向性の確認用としてご利用ください。
+    </div>
+
+    <h3 style="font-size:14px;color:var(--sumi);margin:22px 0 8px;">役割定義（Config.Fonts）</h3>
+    <div style="overflow-x:auto;">
+    <table class="fontTable">
+      <thead><tr><th>役割</th><th>Config参照</th><th>実機（Roblox）</th><th>Web近似プレビュー</th><th>主な用途</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>Head</b><br><span style="color:var(--sumi);font-size:11.5px;">見出し／数字／強調</span></td>
+          <td><code>Config.Fonts.Head</code></td>
+          <td><code>Enum.Font.FredokaOne</code></td>
+          <td style="font-family:var(--font-head);font-weight:800;font-size:16px;">Aa1234 見出し</td>
+          <td>タイマー・色カード・色カウンタ・「かくれた！／みつかる！」・リザルト見出し・ボタンラベル・BillboardGuiの大文字・ネームタグ・吹き出し・文字弾「み／つけ／た」</td>
+        </tr>
+        <tr>
+          <td><b>Body</b><br><span style="color:var(--sumi);font-size:11.5px;">本文／小さめ／説明</span></td>
+          <td><code>Config.Fonts.Body</code></td>
+          <td><code>Enum.Font.Cartoon</code></td>
+          <td style="font-family:var(--font-body);font-weight:600;font-size:16px;">Aa1234 本文</td>
+          <td>FTUE本文・操作ヒント行・ショップ説明・トースト・リザルト補足行・一覧の小さい値表示</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 style="font-size:14px;color:var(--sumi);margin:22px 0 8px;">実文言での比較（英数字部分に注目）</h3>
+    <div class="fontSampleGrid">
+      <div class="fontSample headSample">
+        <div class="tag">Head（FredokaOne相当）</div>
+        <div class="big">04:52</div>
+        <div class="mid">OPEN!</div>
+        <div class="jp">かくれた！　みーつけた！</div>
+      </div>
+      <div class="fontSample bodySample">
+        <div class="tag">Body（Cartoon相当）</div>
+        <div class="big">04:52</div>
+        <div class="mid">OPEN!</div>
+        <div class="jp">Shift＝走る（音が出る）　C＝しゃがむ（静か）</div>
+      </div>
+    </div>
+
+    <h3 style="font-size:14px;color:var(--sumi);margin:22px 0 8px;">適用実績（Luau側・今回の追加実装）</h3>
+    <div class="note" style="font-size:13px;">
+      src全域のTextLabel／TextButton／FontFaceを洗い出し、<b>Head 50箇所・Body 13箇所（合計63箇所）</b>を<code>Config.Fonts</code>参照へ統一しました。文字弾「み／つけ／た」・「クリチちゃーん！」吹き出し・ネームタグは仕様どおりHead扱いです。<br><br>
+      <b>スキップした箇所</b>：<code>MapBuilder.luau</code>（V1／<code>Config.Features.DungeonMaker=false</code>で現在未使用のため不可侵方針を継続、1箇所）／<code>EscapeGateFX.luau</code>・<code>RoundStartFX.luau</code>（TextLabel等の文字要素自体が存在せずFont指定箇所なし）／<code>ProximityPrompt</code>（RobloxのAPI仕様上Fontプロパティが存在せず指定不可）。
+    </div>
+
+    <p class="src">出典：Config.luau L.40-53（Config.Fonts定義）／Hud.luau・ShopUI.luau・ResultScreen.luau・RoundService.luau・YasakiEncounter.luau・FudaHalo.luau・HarichiMinionService.luau・Jumpscare.luau・Survival.luau・PopoDread.luau・PopoBullet.luau・BeamHitFX.luau・SafeZoneService.luau・NameTagService.luau・MapBuilderV2.luau（コミット43e7e38 ほか）</p>
+  </section>
+
 </main>
 
 <footer>
   <div class="wrap">
-    生成元コミット：<code id="commitHash">1279c8fe27f4590da0053495b1d36d8febe65007</code>　│　生成日時：<code id="genDate">2026-07-28（icons_v2埋め込み更新）</code><br>
-    スプリントごとに再生成する運用を想定（次回はicons_v2生成完了後の再生成を推奨）。03_Roblox実装/src/ は読み取りのみで作成。
+    生成元コミット：<code id="commitHash">43e7e38</code>　│　生成日時：<code id="genDate">2026-07-28（クリチフォント統一・⑩フォントセクション追加）</code><br>
+    スプリントごとに再生成する運用を想定（次回は監修サイトui.htmlへの同期後の差分発生時に再生成を推奨）。03_Roblox実装/src/ は読み取りのみで作成。
   </div>
 </footer>
 
