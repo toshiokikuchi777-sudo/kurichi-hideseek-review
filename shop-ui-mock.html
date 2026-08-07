@@ -1,0 +1,522 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>kurichi hide&amp;seek ショップUIモック｜監修サイト</title>
+<style>
+  .reviewBar{background:#0a0a0d; border-bottom:1px solid #2c2c36; padding:8px 20px; font-size:12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP",-apple-system,BlinkMacSystemFont,sans-serif;}
+  .reviewBar a{color:#f6d365; text-decoration:none;}
+  .reviewBadge{color:#e84a5f; border:1px solid #e84a5f; border-radius:999px; padding:2px 10px; font-size:11px;}
+  :root{
+    --ink:#0f0f14; --ink2:#17171e; --ink3:#1e1e26;
+    --cream:#faf0e1; --sumi:#b4afa8;
+    --ichigo:#e84a5f; --banana:#f6d365; --choco:#825434;
+    --panel-bg:#1c1814;
+    --row-bg:rgba(15,15,20,.55);
+    --row-border:rgba(80,74,70,.55);
+    --tab-active:#5e1e1c;
+    --tab-inactive:#2e2a28;
+    --btn-equipped-bg:#3c5a3c; --btn-equipped-text:#bee6c3;
+    --btn-equip-bg:#3c3220;
+    --btn-locked-bg:#322c28;
+    --btn-buy-bg:#5e1e1c;
+    --close-bg:#3c1414;
+    --font-head:"Baloo 2","Fredoka","Nunito","Trebuchet MS","Arial Rounded MT Bold",sans-serif;
+    --font-body:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP",-apple-system,BlinkMacSystemFont,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--ink); color:var(--cream);
+    font-family:var(--font-body);
+    line-height:1.6;
+  }
+  a{color:var(--banana);}
+  .wrap{max-width:820px; margin:0 auto; padding:0 18px;}
+
+  header.top{
+    background:linear-gradient(180deg,#12121a,var(--ink));
+    border-bottom:2px solid var(--ichigo);
+    padding:22px 0 16px;
+  }
+  header.top h1{font-size:clamp(18px,4vw,26px); margin:0 0 .3em; font-weight:900; font-family:var(--font-head);}
+  header.top p{color:var(--sumi); margin:0; font-size:13px;}
+
+  .mockNotice{
+    background:var(--ink2); border:1px solid #2c2c36; border-left:5px solid var(--banana);
+    border-radius:10px; padding:12px 16px; margin:16px auto 0; font-size:12.5px; color:var(--sumi);
+    max-width:820px;
+  }
+  .mockNotice b{color:var(--banana);}
+
+  main{padding:24px 0 60px;}
+
+  /* ===== ステージ（背景演出：夜のクリチランドHUD風） ===== */
+  .stage{
+    position:relative; border-radius:20px; overflow:hidden;
+    padding:34px 14px 40px;
+    background:
+      radial-gradient(ellipse at 20% -10%, rgba(232,74,95,.25), transparent 55%),
+      radial-gradient(ellipse at 85% 110%, rgba(246,211,101,.16), transparent 55%),
+      linear-gradient(180deg,#151016,#0c0a0d 60%,#100c0d);
+    border:1px solid #2c2420;
+  }
+
+  /* ===== ショップパネル本体（Robloxらしい黒縁・厚み・角丸を全体に一括） ===== */
+  .shopPanel{
+    background:var(--panel-bg);
+    max-width:640px; margin:0 auto;
+    border-radius:26px;
+    border:5px solid #000;
+    box-shadow:0 9px 0 0 #000, 0 20px 34px rgba(0,0,0,.55);
+    padding:18px 18px 20px;
+  }
+  .shopHeaderRow{display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:14px;}
+  .shopTitle{
+    font-family:var(--font-head); font-weight:900; font-size:clamp(17px,4.4vw,23px); color:var(--cream);
+    text-shadow:-1.4px -1.4px 0 #000, 1.4px -1.4px 0 #000, -1.4px 1.4px 0 #000, 1.4px 1.4px 0 #000;
+    line-height:1.2;
+  }
+  .shopHeadRight{display:flex; align-items:center; gap:8px; flex:0 0 auto;}
+  .zeniBadge{
+    background:#241d16; border:3px solid #000; border-radius:999px; padding:7px 14px;
+    font-family:var(--font-head); font-weight:900; font-size:clamp(12px,3.2vw,15px); color:var(--banana);
+    white-space:nowrap;
+    box-shadow:0 3px 0 0 #000;
+  }
+  .closeBtn{
+    width:38px; height:38px; border-radius:12px; border:3px solid #000;
+    background:var(--close-bg); color:var(--cream); font-family:var(--font-head); font-weight:900; font-size:18px;
+    cursor:pointer; box-shadow:0 3px 0 0 #000;
+  }
+  .closeBtn:active{transform:translateY(2px); box-shadow:0 1px 0 0 #000;}
+
+  .tabRow{
+    display:flex; gap:8px; overflow-x:auto; padding-bottom:6px; margin-bottom:10px;
+    scrollbar-width:thin; scrollbar-color:var(--sumi) transparent;
+  }
+  .tabRow::-webkit-scrollbar{height:5px;}
+  .tabRow::-webkit-scrollbar-thumb{background:var(--sumi); border-radius:3px;}
+  .tabBtn{
+    flex:0 0 auto; padding:10px 16px; border-radius:12px; border:3px solid #000;
+    background:var(--tab-inactive); color:var(--sumi); font-family:var(--font-head); font-weight:900;
+    font-size:14px; cursor:pointer; white-space:nowrap; box-shadow:0 3px 0 0 #000;
+    min-height:44px;
+  }
+  .tabBtn.active{background:var(--tab-active); color:var(--cream);}
+  .tabBtn:active{transform:translateY(2px); box-shadow:0 1px 0 0 #000;}
+  .tabBtnMonetize{position:relative;}
+  .tabBtnMonetize::after{
+    content:"P3"; position:absolute; top:-8px; right:-6px; background:var(--ichigo); color:#fff;
+    font-size:9px; font-weight:900; border-radius:999px; padding:1px 5px; border:1.5px solid #000;
+  }
+
+  .itemList{max-height:420px; overflow-y:auto; padding-right:2px;}
+  .tabPanel{display:none;}
+  .tabPanel.active{display:block;}
+
+  .monetizeWarn{
+    background:#2a1e12; border:2px solid #000; border-left:5px solid var(--banana); border-radius:10px;
+    padding:10px 12px; margin-bottom:10px; font-size:12px; color:var(--banana); font-weight:700; line-height:1.5;
+  }
+
+  .shopRow{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    background:var(--row-bg); border:2.5px solid #000; border-radius:14px;
+    padding:10px 12px; margin-bottom:9px;
+    box-shadow:0 3px 0 0 rgba(0,0,0,.6);
+  }
+  .rowMain{min-width:0; flex:1 1 auto;}
+  .rowName{
+    font-family:var(--font-head); font-weight:900; font-size:15px; color:var(--cream);
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  .rowName.gold{color:var(--banana);}
+  .rowSub{font-size:12px; color:var(--sumi); margin-top:2px;}
+  .rowSub.wrap2{white-space:normal; line-height:1.4;}
+
+  .rowBtn{
+    flex:0 0 auto; min-width:96px; min-height:44px; padding:0 12px; border-radius:12px; border:3px solid #000;
+    font-family:var(--font-head); font-weight:900; font-size:13px; cursor:pointer;
+    box-shadow:0 3px 0 0 #000;
+  }
+  .rowBtn:active:not(:disabled){transform:translateY(2px); box-shadow:0 1px 0 0 #000;}
+  .rowBtn:disabled{cursor:default;}
+  .state-equipped{background:var(--btn-equipped-bg); color:var(--btn-equipped-text);}
+  .state-equip{background:var(--btn-equip-bg); color:var(--banana);}
+  .state-locked{background:var(--btn-locked-bg); color:var(--sumi);}
+  .state-buy-ok{background:var(--btn-buy-bg); color:var(--cream);}
+  .state-buy-ng{background:var(--btn-locked-bg); color:var(--sumi);}
+
+  .rowMonetize .rowBtn{min-width:78px;}
+
+  .reopenWrap{max-width:640px; margin:14px auto 0; text-align:center;}
+  .reopenBtn{
+    display:none; background:var(--ichigo); color:#fff; border:3px solid #000; border-radius:12px;
+    padding:12px 20px; font-family:var(--font-head); font-weight:900; font-size:14px; cursor:pointer;
+    box-shadow:0 4px 0 0 #000;
+  }
+
+  /* ===== 入口セクション ===== */
+  .entrySection{margin-top:38px;}
+  .entrySection h2{font-family:var(--font-head); font-size:17px; margin:0 0 4px;}
+  .entrySection>p{color:var(--sumi); font-size:12.5px; margin:0 0 16px;}
+  .entryRow{display:flex; gap:18px; flex-wrap:wrap;}
+  .entryCard{flex:1 1 260px; background:var(--ink2); border:1px solid #2c2c36; border-radius:14px; padding:16px;}
+  .entryCaption{font-size:12px; color:var(--sumi); margin:12px 0 0; line-height:1.6;}
+
+  .promptBox{
+    display:inline-flex; align-items:center; gap:10px; background:rgba(0,0,0,.55);
+    border:3px solid #000; border-radius:12px; padding:8px 14px; box-shadow:0 3px 0 0 #000;
+  }
+  .keycap{
+    width:34px; height:34px; border-radius:8px; background:#fff; color:#111; border:2.5px solid #000;
+    display:flex; align-items:center; justify-content:center; font-family:var(--font-head); font-weight:900; font-size:16px;
+    box-shadow:0 2px 0 0 #000;
+  }
+  .promptAction{font-size:11px; color:var(--sumi); letter-spacing:.04em;}
+  .promptObject{font-family:var(--font-head); font-weight:900; font-size:16px; color:var(--cream);}
+
+  .touchBtnDemo{
+    width:78px; height:78px; border-radius:50%; background:var(--cream); border:3.5px solid #000;
+    display:flex; align-items:center; justify-content:center; text-align:center;
+    font-family:var(--font-head); font-weight:900; font-size:13px; color:var(--choco);
+    box-shadow:0 5px 0 0 #000;
+  }
+
+  footer.bot{
+    max-width:820px; margin:40px auto 0; padding:18px; border-top:1px solid #2c2c36;
+    color:var(--sumi); font-size:11px; line-height:1.8;
+  }
+  footer.bot code{background:#000; padding:1px 6px; border-radius:4px; color:var(--banana); font-size:.95em;}
+
+  @media (max-width:480px){
+    .shopPanel{padding:14px 12px 16px; border-radius:20px;}
+    .shopTitle{font-size:16px;}
+    .zeniBadge{padding:6px 10px; font-size:11px;}
+    .rowBtn{min-width:82px; font-size:12px;}
+    .rowName{font-size:14px;}
+    .entryRow{flex-direction:column;}
+  }
+</style>
+<script>
+  // 監修サイト用ゲートチェック：未認証なら index.html へ戻す（ui.html/assets.html/monetization.html と同じ流儀）
+  if (sessionStorage.getItem("kurichi_review_ok") !== "1") {
+    location.replace("index.html");
+  }
+</script>
+</head>
+<body>
+
+<div class="reviewBar wrap" style="max-width:none;">
+  <a href="index.html">← 監修メニューに戻る</a>
+  <span class="reviewBadge">社外秘 / 監修用</span>
+</div>
+
+<header class="top">
+  <div class="wrap">
+    <h1>ショップUIモック（クリチ泥棒）</h1>
+    <p>StarterPlayerScripts/ShopUI.luau ／ ReplicatedStorage/Shared/Config.luau をもとに再現</p>
+  </div>
+</header>
+
+<div class="mockNotice wrap">
+  <b>見た目確認用モック（実スクリーンショットではありません）</b>・2026-08-07時点のコードから作成。
+  タブ構成・商品名・価格・文言は実装（ShopUI.luau／Config.Shop／Config.Monetization）と一致させています。
+  所持金・所持/装備状態は、ボタンの見え方バリエーションを一覧できるようにした一例（架空の1プレイヤーの状態）です。
+</div>
+
+<main class="wrap">
+  <div class="stage">
+    <div class="shopPanel" id="shopPanel">
+      <div class="shopHeaderRow">
+        <div class="shopTitle">ショップ──アンロック</div>
+        <div class="shopHeadRight">
+          <div class="zeniBadge">クリチコイン 130</div>
+          <button class="closeBtn" type="button" id="closeBtn" aria-label="閉じる">×</button>
+        </div>
+      </div>
+
+      <div class="tabRow" id="tabRow">
+        <button class="tabBtn active" data-tab="fuda" type="button">そまりぐあい</button>
+        <button class="tabBtn" data-tab="bat" type="button">バット</button>
+        <button class="tabBtn" data-tab="motif" type="button">モチーフ</button>
+        <button class="tabBtn" data-tab="title" type="button">表示称号</button>
+        <button class="tabBtn tabBtnMonetize" data-tab="monetize" type="button">課金</button>
+      </div>
+
+      <div class="itemList">
+        <!-- ① そまりぐあい（fudaSkin） -->
+        <div class="tabPanel active" data-panel="fuda">
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">ふつう</div><div class="rowSub">最初から解放済み</div></div>
+            <button class="rowBtn state-equipped" disabled>装備中</button>
+          </div>
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">つやつや</div><div class="rowSub">価格 クリチコイン150</div></div>
+            <button class="rowBtn state-buy-ng" type="button">購入する</button>
+          </div>
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">ほんのり</div><div class="rowSub">価格 クリチコイン120</div></div>
+            <button class="rowBtn state-equip" type="button">装備する</button>
+          </div>
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">はじまりのいちご</div><div class="rowSub">対応するパス所持で自動解放</div></div>
+            <button class="rowBtn state-locked" disabled>未解除</button>
+          </div>
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">プレミアムシルバー</div><div class="rowSub">Robloxプレミアム会員だと自動解放</div></div>
+            <button class="rowBtn state-locked" disabled>未解除</button>
+          </div>
+        </div>
+
+        <!-- ② バット（BatSkins・内部カテゴリキーは名残でlantern） -->
+        <div class="tabPanel" data-panel="bat">
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">木のバット</div><div class="rowSub">最初から解放済み</div></div>
+            <button class="rowBtn state-equipped" disabled>装備中</button>
+          </div>
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">クリチバット・赤</div><div class="rowSub">価格 クリチコイン80</div></div>
+            <button class="rowBtn state-buy-ok" type="button">購入する</button>
+          </div>
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">フランスパン色</div><div class="rowSub">価格 クリチコイン100</div></div>
+            <button class="rowBtn state-buy-ok" type="button">購入する</button>
+          </div>
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">ハリセン白</div><div class="rowSub">価格 クリチコイン70</div></div>
+            <button class="rowBtn state-equip" type="button">装備する</button>
+          </div>
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">きんのバット</div><div class="rowSub">価格 クリチコイン200</div></div>
+            <button class="rowBtn state-buy-ng" type="button">購入する</button>
+          </div>
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">はじまりのストライプバット</div><div class="rowSub">対応するパス所持で自動解放</div></div>
+            <button class="rowBtn state-locked" disabled>未解除</button>
+          </div>
+        </div>
+
+        <!-- ③ モチーフ（Motifs・15種） -->
+        <div class="tabPanel" data-panel="motif">
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">いちご（標準）</div><div class="rowSub">最初から解放済み</div></div>
+            <button class="rowBtn state-equipped" disabled>装備中</button>
+          </div>
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">りんご</div><div class="rowSub">価格 クリチコイン70</div></div>
+            <button class="rowBtn state-buy-ok" type="button">購入する</button>
+          </div>
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">いちごアメ</div><div class="rowSub">価格 クリチコイン110</div></div>
+            <button class="rowBtn state-buy-ok" type="button">購入する</button>
+          </div>
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">抹茶ソフト</div><div class="rowSub">価格 クリチコイン70</div></div>
+            <button class="rowBtn state-equip" type="button">装備する</button>
+          </div>
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">だいふく</div><div class="rowSub">価格 クリチコイン90</div></div>
+            <button class="rowBtn state-buy-ok" type="button">購入する</button>
+          </div>
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">メロンパン</div><div class="rowSub">価格 クリチコイン120</div></div>
+            <button class="rowBtn state-buy-ok" type="button">購入する</button>
+          </div>
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">ぶどう</div><div class="rowSub">価格 クリチコイン70</div></div>
+            <button class="rowBtn state-buy-ok" type="button">購入する</button>
+          </div>
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">ぶどうゼリー</div><div class="rowSub">価格 クリチコイン100</div></div>
+            <button class="rowBtn state-buy-ok" type="button">購入する</button>
+          </div>
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">ぶどうアメ</div><div class="rowSub">価格 クリチコイン110</div></div>
+            <button class="rowBtn state-buy-ok" type="button">購入する</button>
+          </div>
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">バナナ</div><div class="rowSub">価格 クリチコイン70</div></div>
+            <button class="rowBtn state-buy-ok" type="button">購入する</button>
+          </div>
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">レモン</div><div class="rowSub">価格 クリチコイン90</div></div>
+            <button class="rowBtn state-buy-ok" type="button">購入する</button>
+          </div>
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">プリン</div><div class="rowSub">価格 クリチコイン130</div></div>
+            <button class="rowBtn state-buy-ok" type="button">購入する</button>
+          </div>
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">ブルーベリーバー</div><div class="rowSub">価格 クリチコイン80</div></div>
+            <button class="rowBtn state-buy-ok" type="button">購入する</button>
+          </div>
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">ブルーベリードーナツ</div><div class="rowSub">価格 クリチコイン120</div></div>
+            <button class="rowBtn state-buy-ok" type="button">購入する</button>
+          </div>
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">ブルーベリータルト</div><div class="rowSub">価格 クリチコイン150</div></div>
+            <button class="rowBtn state-buy-ng" type="button">購入する</button>
+          </div>
+        </div>
+
+        <!-- ④ 表示称号（Titles） -->
+        <div class="tabPanel" data-panel="title">
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">（称号なし）</div><div class="rowSub">最初から解放済み</div></div>
+            <button class="rowBtn state-equipped" disabled>装備中</button>
+          </div>
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">駆け出しのゲスト</div><div class="rowSub">価格 クリチコイン100</div></div>
+            <button class="rowBtn state-buy-ok" type="button">購入する</button>
+          </div>
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">ナイトパークの通</div><div class="rowSub">価格 クリチコイン150</div></div>
+            <button class="rowBtn state-buy-ng" type="button">購入する</button>
+          </div>
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">おかえりの道を知る者</div><div class="rowSub">実績解除済み</div></div>
+            <button class="rowBtn state-equip" type="button">装備する</button>
+          </div>
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">クリチランドの常連</div><div class="rowSub">実績解除で入手</div></div>
+            <button class="rowBtn state-locked" disabled>未解除</button>
+          </div>
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">無傷の逃げ足</div><div class="rowSub">実績解除で入手</div></div>
+            <button class="rowBtn state-locked" disabled>未解除</button>
+          </div>
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">フレーバー一番乗り</div><div class="rowSub">実績解除で入手</div></div>
+            <button class="rowBtn state-locked" disabled>未解除</button>
+          </div>
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">みつけ上手</div><div class="rowSub">実績解除で入手</div></div>
+            <button class="rowBtn state-locked" disabled>未解除</button>
+          </div>
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">クリチランドVIPゲスト</div><div class="rowSub">対応するパス所持で自動解放</div></div>
+            <button class="rowBtn state-locked" disabled>未解除</button>
+          </div>
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">はじめてのクリチ泥棒</div><div class="rowSub">対応するパス所持で自動解放</div></div>
+            <button class="rowBtn state-locked" disabled>未解除</button>
+          </div>
+          <div class="shopRow">
+            <div class="rowMain"><div class="rowName">クリチちゃんデビュー</div><div class="rowSub">実績解除済み</div></div>
+            <button class="rowBtn state-equip" type="button">装備する</button>
+          </div>
+        </div>
+
+        <!-- ⑤ 課金（Config.Monetization.SKUs・全SKU passId/productId=0のためP3時点では非表示） -->
+        <div class="tabPanel" data-panel="monetize">
+          <div class="monetizeWarn">
+            ⚠️ 現在ゲーム内では非表示（商品ID未設定のため）。公開後にIDを設定すると5番目のタブとして出現
+          </div>
+          <div class="shopRow rowMonetize">
+            <div class="rowMain">
+              <div class="rowName gold">クリチサポーターパス</div>
+              <div class="rowSub wrap2">赤白ストライプのネームタグ枠＋称号「クリチランドVIPゲスト」＋コイン獲得+25%＋サポーターバッジ</div>
+            </div>
+            <button class="rowBtn state-buy-ok" type="button">R$ 249</button>
+          </div>
+          <div class="shopRow rowMonetize">
+            <div class="rowMain">
+              <div class="rowName gold">パンチデコ：ハートいちご</div>
+              <div class="rowSub wrap2">ハリチくんをぶっ飛ばす時の星エフェクトをハート＋いちごに</div>
+            </div>
+            <button class="rowBtn state-buy-ok" type="button">R$ 99</button>
+          </div>
+          <div class="shopRow rowMonetize">
+            <div class="rowMain">
+              <div class="rowName gold">クリチ花火</div>
+              <div class="rowSub wrap2">ロビー広場に赤白ストライプの花火を打ち上げ（全員が見られるお祝い）</div>
+            </div>
+            <button class="rowBtn state-buy-ok" type="button">R$ 25</button>
+          </div>
+          <div class="shopRow rowMonetize">
+            <div class="rowMain">
+              <div class="rowName gold">スターターパック</div>
+              <div class="rowSub wrap2">限定称号「はじめてのクリチ泥棒」＋限定そまりぐあい1種＋限定バットスキン1種（コスメのみ・コイン等の通貨は一切含まない）</div>
+            </div>
+            <button class="rowBtn state-buy-ok" type="button">R$ 99</button>
+          </div>
+          <div class="shopRow rowMonetize">
+            <div class="rowMain">
+              <div class="rowName gold">鬼チケット</div>
+              <div class="rowSub wrap2">次回以降のラウンドで鬼（人間操作クリチちゃん）に優先的に選ばれる（購入時+1枚。ラウンドが来なくても失われない永続の所持数）（現在の所持 2枚）</div>
+            </div>
+            <button class="rowBtn state-buy-ok" type="button">R$ 49</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="reopenWrap">
+    <button class="reopenBtn" id="reopenBtn" type="button">ショップを開き直す</button>
+  </div>
+
+  <!-- ===== 入口イメージ ===== -->
+  <section class="entrySection">
+    <h2>入口イメージ（参考）</h2>
+    <p>ロビー屋台に設置された ProximityPrompt（名前="ShopPrompt"）がショップの入口。実装上はPC/スマホとも専用の見た目はこの1系統のみ。</p>
+    <div class="entryRow">
+      <div class="entryCard">
+        <div class="promptBox">
+          <div class="keycap">E</div>
+          <div class="promptText">
+            <div class="promptAction">覗く</div>
+            <div class="promptObject">ショップ</div>
+          </div>
+        </div>
+        <p class="entryCaption">Roblox標準ProximityPromptの簡易再現。ActionText="覗く" / ObjectText="ショップ" / HoldDuration=0（触れると即トリガー）。</p>
+      </div>
+      <div class="entryCard">
+        <div class="touchBtnDemo">ショップ</div>
+        <p class="entryCaption">スマホ操作時の丸ボタン風イメージ（参考表示）。ショップ専用のタッチボタンは実装されておらず、スマホでも範囲内で同じProximityPromptが自動表示されます。既存のパンチ／鬼に立候補ボタンと統一感のある丸ボタンの見た目で例示しています。</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="bot wrap">
+  出典：<code>03_Roblox実装/src/StarterPlayer/StarterPlayerScripts/ShopUI.luau</code>（パネル構造・タブ定義・行レイアウト・ボタン状態のロジック）／
+  <code>03_Roblox実装/src/ReplicatedStorage/Shared/Config.luau</code>（Config.Shop.FudaSkins／BatSkins／Motifs／Titles・Config.Monetization.SKUs・Config.Palette）／
+  <code>03_Roblox実装/src/ServerScriptService/Systems/RoundService.luau</code>（ShopPromptのActionText/ObjectText）。
+  所持金・所持/装備の状態は表示バリエーションを見せるための例示であり、実際のプレイヤーデータではありません。
+</footer>
+
+<script>
+(function(){
+  var tabBtns = document.querySelectorAll('.tabBtn');
+  var panels = document.querySelectorAll('.tabPanel');
+  tabBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      tabBtns.forEach(function(b){ b.classList.remove('active'); });
+      panels.forEach(function(p){ p.classList.remove('active'); });
+      btn.classList.add('active');
+      var key = btn.getAttribute('data-tab');
+      var target = document.querySelector('.tabPanel[data-panel="' + key + '"]');
+      if(target){ target.classList.add('active'); }
+    });
+  });
+
+  var panel = document.getElementById('shopPanel');
+  var reopenBtn = document.getElementById('reopenBtn');
+  document.getElementById('closeBtn').addEventListener('click', function(){
+    panel.style.display = 'none';
+    reopenBtn.style.display = 'inline-block';
+  });
+  reopenBtn.addEventListener('click', function(){
+    panel.style.display = '';
+    reopenBtn.style.display = 'none';
+  });
+})();
+</script>
+
+</body>
+</html>
